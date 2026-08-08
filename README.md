@@ -1,6 +1,6 @@
 # Personal Agent
 
-Local-first system that turns rough spoken thoughts into organized Markdown knowledge while preserving original captures.
+Local-first Second Brain that turns raw text and source material into organized Markdown knowledge while preserving original evidence.
 
 ## Start
 
@@ -9,33 +9,44 @@ pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:4444](http://localhost:4444).
 
 ## Content Model
 
+Canonical notes live outside this repository. Set their absolute path in `.env.local`:
+
+```bash
+NOTES_DIR=/absolute/path/to/notes
+```
+
 ```text
-content/
-├── captures/YYYY/MM/       # Immutable raw transcripts
-├── notes/<category>/       # Polished, organized knowledge
-└── templates/              # Canonical Markdown schemas
+NOTES_DIR/
+├── captures/YYYY/MM/       # Immutable user input
+├── sources/YYYY/MM/        # Retrieved external source material
+├── projects/               # Committed, finite outcomes
+├── areas/                  # Ongoing responsibilities
+├── resources/              # Useful ideas, topics, and summaries
+├── archives/               # Inactive PARA material
+├── inbox/                  # Processed, unassigned actions
+├── reviews/weekly/         # Review records
 ```
 
 Processing flow:
 
 ```text
-raw input -> draft capture -> classify/summarize -> create or update notes -> processed capture
+raw input -> immutable capture -> optional source record -> PARA notes -> pending review
 ```
 
-See [`docs/content-workflow.md`](docs/content-workflow.md) for schemas, category guidance, and mandatory processing rules. Repository agents also receive these rules through [`AGENTS.md`](AGENTS.md).
+This repository uses PARA (Projects, Areas, Resources, Archives) for processed material and adds immutable captures for provenance. See [`docs/content-workflow.md`](docs/content-workflow.md) for classification, schemas, and mandatory processing rules. Agent guidance and templates remain under repository [`content`](content); personal data lives only under `NOTES_DIR`. Repository agents receive these rules through [`AGENTS.md`](AGENTS.md).
 
 ## Application Structure
 
-- `src/lib/notes.ts`: recursive note parser and storage boundary
+- `src/lib/notes.ts`: PARA note parser and storage boundary
 - `src/app/page.tsx`: note library
 - `src/app/notes/[slug]/page.tsx`: rendered polished note
 - `src/components`: shared presentation
 
-Routes use note slug alone, so filenames and note IDs must remain globally unique across category folders.
+Routes use note slug alone, so filenames and note IDs must remain globally unique across all PARA folders.
 
 ## Next Features
 

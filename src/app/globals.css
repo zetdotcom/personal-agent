@@ -25,6 +25,23 @@ a { color: inherit; text-decoration: none; }
 .stats dt { font: 30px Georgia, serif; }
 .stats dd { margin: 5px 0 0; color: var(--muted); font: 10px var(--font-geist-mono), monospace; letter-spacing: .12em; text-transform: uppercase; }
 .library { padding: 66px 0 110px; }
+.dashboard { display: grid; grid-template-columns: 1.35fr 1fr; gap: 14px; padding: 66px 0 0; }
+.todo-panel, .explorer-card { min-height: 230px; padding: 28px; border: 1px solid var(--line); background: rgba(250, 249, 244, .68); }
+.todo-panel .section-heading { margin-bottom: 24px; }
+.todo-panel .section-heading h2 a:hover { color: var(--moss); }
+.todo-list { margin: 0; padding: 0; list-style: none; }
+.todo-list li { display: flex; align-items: flex-start; gap: 13px; padding: 14px 0; border-top: 1px solid var(--line); font: 15px/1.5 Georgia, serif; }
+.todo-list i { flex: 0 0 17px; width: 17px; height: 17px; margin-top: 2px; border: 1px solid var(--moss); border-radius: 50%; }
+.empty-state { margin: 0; padding: 22px 0; color: var(--muted); font: italic 16px Georgia, serif; }
+.explorer-card { display: flex; align-items: center; gap: 22px; transition: transform .25s ease, background .25s ease, box-shadow .25s ease; }
+.explorer-card:hover { transform: translateY(-4px); background: var(--card); box-shadow: 0 14px 30px rgba(49, 54, 43, .07); }
+.folder-mark { position: relative; flex: 0 0 60px; width: 60px; height: 45px; border: 1px solid var(--moss); border-radius: 3px; }
+.folder-mark::before { content: ""; position: absolute; top: -10px; left: -1px; width: 25px; height: 10px; border: 1px solid var(--moss); border-bottom: 0; border-radius: 3px 3px 0 0; background: var(--paper); }
+.explorer-card > span:nth-child(2) { display: flex; min-width: 0; flex-direction: column; }
+.explorer-card small, .explorer-card em { color: var(--muted); font: 9px var(--font-geist-mono), monospace; letter-spacing: .08em; text-transform: uppercase; }
+.explorer-card strong { margin: 9px 0; font: 23px Georgia, serif; }
+.explorer-card em { line-height: 1.5; text-transform: none; }
+.explorer-card b { margin-left: auto; color: var(--moss); font-weight: 400; }
 .section-heading { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 30px; }
 .section-heading h2 { margin: 0; font: 25px Georgia, serif; }
 .section-heading span { color: var(--muted); font: 10px var(--font-geist-mono), monospace; letter-spacing: .1em; text-transform: uppercase; }
@@ -43,6 +60,47 @@ a { color: inherit; text-decoration: none; }
 footer { padding: 28px 0 45px; border-top: 1px solid var(--line); color: var(--muted); font: 10px var(--font-geist-mono), monospace; letter-spacing: .08em; text-transform: uppercase; }
 .note-shell { min-height: 100vh; }
 .note-detail { width: min(760px, 100%); margin: 0 auto; padding: 100px 0 130px; }
+.browser { padding: 50px 0 110px; }
+.breadcrumbs { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font: 10px var(--font-geist-mono), monospace; letter-spacing: .06em; }
+.breadcrumbs span { display: flex; gap: 8px; }
+.breadcrumbs a:hover { color: var(--moss); }
+.breadcrumbs i { font-style: normal; color: var(--line); }
+.browser-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; padding: 68px 0 42px; }
+.browser-heading .eyebrow { margin-bottom: 14px; }
+.browser-heading h1, .file-detail h1 { margin: 0; font: 400 clamp(44px, 6vw, 72px)/1 Georgia, serif; letter-spacing: -.045em; }
+.up-button { padding: 12px 15px; border: 1px solid var(--line); color: var(--muted); font: 9px var(--font-geist-mono), monospace; letter-spacing: .08em; text-transform: uppercase; }
+.up-button:hover { color: var(--moss); border-color: var(--moss); }
+.file-list { margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
+.file-list li { border-bottom: 1px solid var(--line); }
+.file-list a, .file-list li > div { min-height: 82px; display: flex; align-items: center; gap: 20px; padding: 14px 18px; }
+.file-list a { transition: padding .2s, background .2s; }
+.file-list a:hover { padding-left: 25px; background: rgba(250, 249, 244, .72); }
+.file-list a > span:nth-child(2), .file-list li > div > span:nth-child(2) { display: flex; flex-direction: column; gap: 6px; }
+.file-list strong { font: 19px Georgia, serif; }
+.file-list small { color: var(--muted); font: 9px var(--font-geist-mono), monospace; letter-spacing: .09em; text-transform: uppercase; }
+.file-list b { margin-left: auto; color: var(--moss); font-weight: 400; }
+.file-icon { position: relative; flex: 0 0 30px; width: 30px; height: 25px; border: 1px solid var(--moss); border-radius: 2px; }
+.folder-icon::before { content: ""; position: absolute; top: -6px; left: -1px; width: 13px; height: 6px; border: 1px solid var(--moss); border-bottom: 0; border-radius: 2px 2px 0 0; }
+.document-icon { width: 23px; height: 29px; margin: 0 3px; border-color: var(--line); }
+.file-detail { width: min(760px, 100%); margin: 0 auto; padding-top: 75px; }
+.file-detail > header { padding-bottom: 48px; border-bottom: 1px solid var(--line); }
+.todos-page { width: min(900px, 100%); margin: 0 auto; padding: 88px 0 120px; }
+.todos-page > header { padding-bottom: 52px; }
+.todos-page h1 { margin: 0; font: 400 clamp(50px, 7vw, 78px)/1 Georgia, serif; letter-spacing: -.05em; }
+.todos-page > header > p:last-child { max-width: 570px; margin: 25px 0 0; color: var(--muted); font: 16px/1.65 Georgia, serif; }
+.todo-editor-toolbar { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 11px 16px; border-block: 1px solid var(--line); }
+.todo-editor-toolbar p { margin: 0; color: var(--muted); font: 10px var(--font-geist-mono), monospace; letter-spacing: .09em; text-transform: uppercase; }
+.save-button { padding: 12px 17px; border: 1px solid var(--moss); background: var(--moss); color: var(--card); font: 10px var(--font-geist-mono), monospace; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.save-button:disabled { opacity: .45; cursor: not-allowed; }
+.todo-editor-list { margin: 0; padding: 0; list-style: none; }
+.todo-editor-list li { display: grid; grid-template-columns: 1fr 150px; gap: 18px; padding: 22px 16px; border-bottom: 1px solid var(--line); transition: background .2s; }
+.todo-editor-list li:focus-within { background: rgba(250, 249, 244, .7); }
+.todo-editor-list label { display: flex; flex-direction: column; gap: 8px; }
+.todo-editor-list label > span { color: var(--muted); font: 9px var(--font-geist-mono), monospace; letter-spacing: .09em; text-transform: uppercase; }
+.todo-editor-list input, .todo-editor-list select { width: 100%; min-height: 43px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 0; background: var(--card); color: var(--ink); font: 16px Georgia, serif; }
+.todo-editor-list select { font: 11px var(--font-geist-mono), monospace; text-transform: uppercase; }
+.todo-editor-list input:focus, .todo-editor-list select:focus { border-color: var(--moss); outline: 1px solid var(--moss); }
+.todo-editor-list .is-complete input { color: var(--muted); text-decoration: line-through; }
 .note-detail > header { padding-bottom: 60px; border-bottom: 1px solid var(--line); }
 .note-detail h1 { font-size: clamp(48px, 7vw, 78px); }
 .note-summary { max-width: 620px; margin: 28px 0 22px; color: var(--muted); font: 18px/1.7 Georgia, serif; }
@@ -63,10 +121,24 @@ footer { padding: 28px 0 45px; border-top: 1px solid var(--line); color: var(--m
   .intro { margin-top: 27px; }
   .stats { position: static; margin-top: 45px; }
   .library { padding: 46px 0 75px; }
+  .dashboard { grid-template-columns: 1fr; padding-top: 46px; }
+  .todo-panel, .explorer-card { min-height: 0; }
+  .explorer-card { align-items: flex-start; }
+  .folder-mark { flex-basis: 42px; width: 42px; height: 32px; margin-top: 5px; }
+  .folder-mark::before { top: -8px; height: 8px; width: 19px; }
   .note-grid { grid-template-columns: 1fr; }
   .note-card { min-height: 280px; }
   .note-detail { padding: 70px 0 90px; }
   .note-detail > header { padding-bottom: 42px; }
   .prose { padding-top: 38px; font-size: 17px; }
+  .browser { padding: 36px 0 80px; }
+  .browser-heading { align-items: flex-start; flex-direction: column; padding: 48px 0 30px; }
+  .file-list a, .file-list li > div { padding-inline: 8px; }
+  .file-list a:hover { padding-left: 12px; }
+  .file-detail { padding-top: 55px; }
+  .todos-page { padding: 60px 0 85px; }
+  .todos-page > header { padding-bottom: 38px; }
+  .todo-editor-list li { grid-template-columns: 1fr; }
+  .todo-editor-toolbar { position: sticky; top: 0; z-index: 2; background: var(--paper); }
 }
 @media (prefers-reduced-motion: reduce) { .note-card { opacity: 1; animation: none; transition: none; } }

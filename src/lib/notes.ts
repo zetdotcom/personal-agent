@@ -2,12 +2,21 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import matter from "gray-matter";
 
-const notesDirectory = path.join(process.cwd(), "content", "notes");
+function getContentDirectory(): string {
+  const directory = process.env.NOTES_DIR;
+  if (!directory) {
+    throw new Error("NOTES_DIR must point to the external notes directory");
+  }
+  return directory;
+}
+const paraDirectories = ["projects", "areas", "resources", "archives"] as const;
 
 export type Note = {
   id: string;
   slug: string;
   title: string;
+  para: "project" | "area" | "resource" | "archive";
+  type: string;
   category: string;
   tags: string[];
   summary: string;
@@ -24,7 +33,7 @@ function toDate(value: unknown): string {
     : String(value ?? "");
 }
 
-function parseNote(filePath: string, source: string): Note {
+function parseNote(filePath: string, source: string, para: Note["para"]): Note {
   const { data, content } = matter(source);
   const slug = path.basename(filePath, ".md");
 
@@ -32,7 +41,9 @@ function parseNote(filePath: string, source: string): Note {
     id: String(data.id ?? slug),
     slug,
     title: String(data.title ?? slug),
-    category: String(data.category ?? path.basename(path.dirname(filePath))),
+    para,
+    type: String(data.type ?? "topic"),
+    category: para,
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     summary: String(data.summary ?? ""),
     created: toDate(data.created),
@@ -49,17 +60,22 @@ async function getMarkdownFiles(directory: string): Promise<string[]> {
     const entryPath = path.join(directory, entry.name);
     return entry.isDirectory()
       ? getMarkdownFiles(entryPath)
-      : Promise.resolve(entry.name.endsWith(".md") ? [entryPath] : []);
+      : Promise.resolve(entry.name.endsWith(".md") && entry.name !== "README.md" ? [entryPath] : []);
   }));
   return files.flat();
 }
 
 export async function getNotes(): Promise<Note[]> {
-  const files = await getMarkdownFiles(notesDirectory);
+  const contentDirectory = getContentDirectory();
+  const files = (await Promise.all(paraDirectories.map(async (directory) => {
+    const para = directory === "archives" ? "archive" : directory.slice(0, -1) as Note["para"];
+    const paths = await getMarkdownFiles(path.join(/* turbopackIgnore: true */ contentDirectory, directory));
+    return paths.map((filePath) => ({ filePath, para }));
+  }))).flat();
   const notes = await Promise.all(
-    files.map(async (file) => {
-      const source = await fs.readFile(file, "utf8");
-      return parseNote(file, source);
+    files.map(async ({ filePath, para }) => {
+      const source = await fs.readFile(filePath, "utf8");
+      return parseNote(filePath, source, para);
     }),
   );
   return notes.sort((a, b) => b.updated.localeCompare(a.updated));

@@ -1,10 +1,14 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import { Mark } from "@/components/mark";
 import { NoteCard } from "@/components/note-card";
+import { getTodos } from "@/lib/library";
 import { getNotes } from "@/lib/notes";
 
 export default async function Home() {
-  const notes = await getNotes();
+  await connection();
+  const [notes, todos] = await Promise.all([getNotes(), getTodos()]);
+  const openTodos = todos.filter((todo) => !todo.completed);
   const groups = new Set(notes.map((note) => note.category));
 
   return (
@@ -21,6 +25,19 @@ export default async function Home() {
           <div><dt>{notes.length.toString().padStart(2, "0")}</dt><dd>notes</dd></div>
           <div><dt>{groups.size.toString().padStart(2, "0")}</dt><dd>groups</dd></div>
         </dl>
+      </section>
+      <section className="dashboard" aria-label="Workspace overview">
+        <div className="todo-panel">
+          <div className="section-heading"><h2><Link href="/todos">Open todos</Link></h2><span>{openTodos.length} remaining</span></div>
+          {openTodos.length > 0 ? (
+            <ul className="todo-list">{openTodos.map((todo) => <li key={todo.line}><i aria-hidden="true" /><span>{todo.title}</span></li>)}</ul>
+          ) : <p className="empty-state">Nothing waiting. Inbox is clear.</p>}
+        </div>
+        <Link className="explorer-card" href="/browse">
+          <span className="folder-mark" aria-hidden="true" />
+          <span><small>Browse library</small><strong>Open file explorer</strong><em>Folders, notes, captures, and sources</em></span>
+          <b aria-hidden="true">→</b>
+        </Link>
       </section>
       <section className="library" aria-labelledby="library-title">
         <div className="section-heading"><h2 id="library-title">Recent notes</h2><span>Newest first</span></div>
