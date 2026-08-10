@@ -27,3 +27,9 @@ When user provides raw thoughts, spoken-note text, or a transcript, read `NOTES_
 - Do not invent details. Preserve uncertainty and use capture status `needs-review` when source cannot be safely resolved.
 - Read relevant guidance under repository `content/` before writing to its matching destination under `NOTES_DIR`.
 - Treat `docs/content-workflow.md` as authoritative when content conventions are unclear.
+
+# Testing Rules
+
+- Prefer high-level integration tests that exercise real application boundaries and provide broad behavioral confidence with few cases.
+- Mock only unavoidable external boundaries, such as third-party APIs. Tests must never make real external API calls.
+- Use real internal modules, server actions, routes, and temporary filesystem storage instead of mocking them.

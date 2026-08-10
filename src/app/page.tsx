@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { connection } from "next/server";
+import { HomeTodos } from "@/components/home-todos";
 import { Mark } from "@/components/mark";
 import { NoteCard } from "@/components/note-card";
 import { getTodos } from "@/lib/library";
@@ -28,10 +29,7 @@ export default async function Home() {
       </section>
       <section className="dashboard" aria-label="Workspace overview">
         <div className="todo-panel">
-          <div className="section-heading"><h2><Link href="/todos">Open todos</Link></h2><span>{openTodos.length} remaining</span></div>
-          {openTodos.length > 0 ? (
-            <ul className="todo-list">{openTodos.map((todo) => <li key={todo.line}><i aria-hidden="true" /><span>{todo.title}</span></li>)}</ul>
-          ) : <p className="empty-state">Nothing waiting. Inbox is clear.</p>}
+          <HomeTodos initialTodos={openTodos} />
         </div>
         <Link className="explorer-card" href="/browse">
           <span className="folder-mark" aria-hidden="true" />

@@ -17,7 +17,7 @@ export default async function TodosPage() {
       <section className="todos-page">
         <header>
           <p className="eyebrow">Task inbox</p>
-          <h1>All todos</h1>
+          <div className="todos-title"><h1>Active todos</h1><Link className="up-button" href="/todos/archive">View archive</Link></div>
           <p>Edit titles and statuses here. Nothing changes in your Markdown file until you save.</p>
         </header>
         <TodoEditor initialTodos={todos} />

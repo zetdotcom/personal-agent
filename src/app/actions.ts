@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getTodos, saveTodos, type Todo } from "@/lib/library";
 
-export type SaveTodosState = { savedAt: number; todos: Todo[] } | null;
+export type SaveTodosState = { revision: string; todos: Todo[] } | null;
 
 export async function saveTodosAction(_: SaveTodosState, formData: FormData): Promise<SaveTodosState> {
   const value = formData.get("todos");
@@ -14,5 +14,5 @@ export async function saveTodosAction(_: SaveTodosState, formData: FormData): Pr
   await saveTodos(edits as Todo[]);
   revalidatePath("/");
   revalidatePath("/todos");
-  return { savedAt: Date.now(), todos: await getTodos() };
+  return { revision: crypto.randomUUID(), todos: await getTodos() };
 }

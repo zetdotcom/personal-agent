@@ -6,7 +6,8 @@
     "dev": "next dev --port 4444",
     "build": "next build",
     "start": "next start --port 4444",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:integration": "playwright test"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
@@ -17,6 +18,7 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

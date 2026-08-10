@@ -28,8 +28,16 @@ export type LibraryEntry =
   | { type: "file"; name: string; source: string };
 
 export async function getTodos(): Promise<Todo[]> {
+  return getTodosFromFile(path.join(getContentDirectory(), "inbox", "tasks.md"));
+}
+
+export async function getArchivedTodos(): Promise<Todo[]> {
+  return getTodosFromFile(path.join(getContentDirectory(), "archives", "todos.md"));
+}
+
+async function getTodosFromFile(filePath: string): Promise<Todo[]> {
   try {
-    const source = await fs.readFile(path.join(getContentDirectory(), "inbox", "tasks.md"), "utf8");
+    const source = await fs.readFile(filePath, "utf8");
     return source.split("\n").flatMap((line, index) => {
       const match = line.match(/^\s*[-*]\s+\[([ xX])\]\s+(.+)$/);
       const body = match?.[2] ?? "";
@@ -44,6 +52,41 @@ export async function getTodos(): Promise<Todo[]> {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
     throw error;
   }
+}
+
+export async function archiveTodo(line: number): Promise<void> {
+  if (!Number.isSafeInteger(line) || line < 0) throw new Error("Invalid todo");
+
+  const tasksPath = path.join(getContentDirectory(), "inbox", "tasks.md");
+  const source = await fs.readFile(tasksPath, "utf8");
+  const lines = source.split("\n");
+  const match = lines[line]?.match(/^(\s*[-*]\s+)\[[ xX]\]\s+(.+)$/);
+  if (!match) throw new Error("Todo no longer exists");
+
+  const archivePath = path.join(getContentDirectory(), "archives", "todos.md");
+  await fs.mkdir(path.dirname(archivePath), { recursive: true });
+  let archive = "# Completed todos\n";
+  try {
+    archive = await fs.readFile(archivePath, "utf8");
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+  }
+  const separator = archive.endsWith("\n") ? "" : "\n";
+  await fs.writeFile(archivePath, `${archive}${separator}${match[1]}[x] ${match[2]}\n`, "utf8");
+
+  lines.splice(line, 1);
+  await fs.writeFile(tasksPath, lines.join("\n"), "utf8");
+}
+
+export async function setTodoCompleted(line: number, completed: boolean): Promise<void> {
+  const todos = await getTodos();
+  const todo = todos.find((candidate) => candidate.line === line);
+  if (!todo) throw new Error("Todo no longer exists");
+  if (completed) {
+    await archiveTodo(line);
+    return;
+  }
+  await saveTodos([{ ...todo, completed: false }]);
 }
 
 export async function saveTodos(edits: TodoEdit[]): Promise<void> {

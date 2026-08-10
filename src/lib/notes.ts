@@ -28,9 +28,8 @@ export type Note = {
 };
 
 function toDate(value: unknown): string {
-  return value instanceof Date
-    ? value.toISOString().slice(0, 10)
-    : String(value ?? "");
+  if (value instanceof Date) return Number.isNaN(value.getTime()) ? "" : value.toISOString().slice(0, 10);
+  return String(value ?? "");
 }
 
 function parseNote(filePath: string, source: string, para: Note["para"]): Note {
@@ -78,7 +77,11 @@ export async function getNotes(): Promise<Note[]> {
       return parseNote(filePath, source, para);
     }),
   );
-  return notes.sort((a, b) => b.updated.localeCompare(a.updated));
+  const slugCounts = new Map<string, number>();
+  for (const note of notes) slugCounts.set(note.slug, (slugCounts.get(note.slug) ?? 0) + 1);
+  return notes
+    .filter((note) => slugCounts.get(note.slug) === 1)
+    .sort((a, b) => b.updated.localeCompare(a.updated));
 }
 
 export async function getNote(slug: string): Promise<Note | null> {

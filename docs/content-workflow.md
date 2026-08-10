@@ -15,6 +15,7 @@ NOTES_DIR/
 │   ├── topics/             # Durable knowledge by topic
 │   └── sources/            # Source-specific summaries
 ├── archives/               # Inactive PARA material
+│   └── todos.md            # Completed task history
 ├── inbox/tasks.md          # Processed actions without a home
 ├── reviews/weekly/YYYY/    # Weekly review records
 └── templates/              # Canonical schemas
@@ -109,3 +110,4 @@ Body uses useful semantic headings such as `Overview`, `Key ideas`, `Decisions`,
 - Pending organized notes remain in correct PARA location and use `review_status: pending`; do not create separate review folder.
 - Weekly review should process capture and task inboxes, inspect active Projects, reconsider stale tasks, review pending notes, and archive inactive material.
 - Review should be short and honest. Do not preserve tasks or projects only because they existed last week.
+- Completing an inbox task moves it from `inbox/tasks.md` to `archives/todos.md`.
